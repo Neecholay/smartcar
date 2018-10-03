@@ -1,14 +1,13 @@
 package com.smartcar.apiservice.responses.smartcar;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.smartcar.apiservice.responses.gm.EngineResponse;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EngineReponse
+public class EngineResponse
 {
     private String status;
 
-    public EngineReponse(String status)
+    public EngineResponse(String status)
     {
         this.status = status;
     }
@@ -23,7 +22,7 @@ public class EngineReponse
         this.status = status;
     }
 
-    public static EngineReponse fromGmResponse(EngineResponse gmResponse)
+    public static EngineResponse fromGmResponse(com.smartcar.apiservice.responses.gm.EngineResponse gmResponse)
     {
         String gmStatus = gmResponse.getActionResult().get("status");
 
@@ -41,6 +40,6 @@ public class EngineReponse
                 break;
         }
 
-        return new EngineReponse(status);
+        return new EngineResponse(status);
     }
 }

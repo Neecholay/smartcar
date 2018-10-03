@@ -2,12 +2,14 @@ package com.smartcar.apiservice;
 
 import com.smartcar.apiservice.responses.gm.EngineRequest;
 import com.smartcar.apiservice.responses.smartcar.*;
-import org.apache.catalina.Engine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * An better API for interfacing with APIs provided by GM
+ */
 @RestController
 @RequestMapping("vehicles/")
 public class VehicleController
@@ -24,6 +26,9 @@ public class VehicleController
     @Autowired
     private VehicleService vehicleService;
 
+    /**
+     * Returns the battery level as a percentage for the specified vehicle id
+     */
     @GetMapping(value = BATTERY_LEVEL, produces = "application/json")
     public BatteryResponse getBatteryLevel(@PathVariable String id) throws Exception
     {
@@ -38,6 +43,9 @@ public class VehicleController
         }
     }
 
+    /**
+     * Returns the fuel level as a percentage for the specified vehicle id
+     */
     @GetMapping(value = FUEL, produces = "application/json")
     public FuelResponse getFuel(@PathVariable String id)
     {
@@ -47,11 +55,14 @@ public class VehicleController
         }
         catch (Exception ex)
         {
-            logger.error("Failed to get fuel info id={} errorType={} exceptionMessage={}", id, ex.getClass(), ex.getMessage());
+            logger.error("Failed to get fuel level id={} errorType={} exceptionMessage={}", id, ex.getClass(), ex.getMessage());
             return new FuelResponse(null);
         }
     }
 
+    /**
+     * Returns vehicle info for the specified vehicle id
+     */
     @GetMapping(value = VEHICLE_INFO, produces = "application/json")
     public VehicleInfoResponse getVehicleInfo(@PathVariable String id)
     {
@@ -66,6 +77,9 @@ public class VehicleController
         }
     }
 
+    /**
+     * Returns lock status of the doors for the specified vehicle id
+     */
     @GetMapping(value = SECURITY, produces = "application/json")
     public SecurityResponse getSecurity(@PathVariable String id)
     {
@@ -80,9 +94,12 @@ public class VehicleController
         }
     }
 
+    /**
+     * Changes the engine status to the state specified in the EngineRequest for the specified vehicle id
+     */
     @PostMapping(value = ENGINE, produces = "application/json")
-    public EngineReponse affectEngine(@PathVariable String id,
-                                      @RequestBody EngineRequest request)
+    public EngineResponse affectEngine(@PathVariable String id,
+                                       @RequestBody EngineRequest request)
     {
         try
         {
@@ -90,8 +107,8 @@ public class VehicleController
         }
         catch (Exception ex)
         {
-            logger.error("Failed to get door security info id={} errorType={} exceptionMessage={}", id, ex.getClass(), ex.getMessage());
-            return new EngineReponse(null);
+            logger.error("Failed to change the engine status id={} errorType={} exceptionMessage={}", id, ex.getClass(), ex.getMessage());
+            return new EngineResponse(null);
         }
     }
 }

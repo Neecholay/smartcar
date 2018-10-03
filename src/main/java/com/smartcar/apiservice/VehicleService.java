@@ -3,7 +3,6 @@ package com.smartcar.apiservice;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartcar.apiservice.responses.gm.EngineRequest;
-import com.smartcar.apiservice.responses.gm.EngineResponse;
 import com.smartcar.apiservice.responses.gm.FuelBatteryResponse;
 import com.smartcar.apiservice.responses.smartcar.*;
 import org.apache.commons.io.IOUtils;
@@ -19,6 +18,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A service for hitting GM endpoints and translating the responses into Smartcar responses
+ */
 @Component
 public class VehicleService
 {
@@ -66,14 +68,14 @@ public class VehicleService
         return SecurityResponse.fromGmResponse(gmResponse);
     }
 
-    public EngineReponse affectEngine(final String id, final EngineRequest request) throws IllegalArgumentException, IOException
+    public EngineResponse affectEngine(final String id, final EngineRequest request) throws IllegalArgumentException, IOException
     {
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("id", id);
         requestParams.put("command", determineGMCommand(request.getAction()));
         String response = getHTTPResponseFromGM(GM_BASE_URL + GM_ENGINE_ENDPOINT, requestParams);
-        EngineResponse gmResponse = new ObjectMapper().readValue(response, EngineResponse.class);
-        return EngineReponse.fromGmResponse(gmResponse);
+        com.smartcar.apiservice.responses.gm.EngineResponse gmResponse = new ObjectMapper().readValue(response, com.smartcar.apiservice.responses.gm.EngineResponse.class);
+        return EngineResponse.fromGmResponse(gmResponse);
     }
 
     private String getHTTPResponseFromGM(String gmApi, Map<String, String> requestParams) throws IOException
